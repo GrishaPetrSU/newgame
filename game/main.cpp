@@ -423,7 +423,7 @@ while (window.isOpen())
 	if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds();//игровое время в 
 		//секундах идёт вперед, пока жив игрок. Перезагружать как time его не надо. оно не обновляет логику игры
 		clock.restart();
-		time = time / 1100;
+		time = time / 1000;
 		createObjectForMapTimer += time;//наращиваем таймер
 		
 		sf::Event event;
