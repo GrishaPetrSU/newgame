@@ -395,8 +395,6 @@ bool isGameStart() {
 
 	Player p(heroImage, 100, 170, 96, 96, "Player");//объект класса игрока
 
-	//std::list<Entity*>  enemies; //список врагов
-	//std::list<Entity*>  Bullets; //список пуль
 	std::list<Entity*>  entities;	//сущности
 	std::list<Entity*>::iterator it; //итератор чтобы проходить по элементам списка
 	std::list<Entity*>::iterator it2;
@@ -447,17 +445,6 @@ while (window.isOpen())
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) { return false; }//если эскейп, то выходим из игры
 
 		p.update(time); //оживл€ем объект УpФ класса УPlayerФ 
-
-		//оживл€ем врагов
-		//for (it = entities.begin(); it != entities.end(); it++)
-		//{
-		//	(*it)->update(time); //запускаем метод update()
-		//}
-		//оживл€ем пули
-		//for (it = entities.begin(); it != entities.end(); it++)
-		//{
-		//	(*it)->update(time); //запускаем метод update()
-		//}
 
 		//ѕровер€ем список на наличие "мертвых" пуль и удал€ем их
 		for (it = entities.begin(); it != entities.end();)//говорим что проходимс€ от начала до конца
