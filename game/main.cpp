@@ -58,21 +58,21 @@ public:
 	void control(){
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {
 			state = left;
-			speed = 0.1;
+			speed = 0.2;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {
 			state = right;
-			speed = 0.1;
+			speed = 0.2;
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
 			state = up;
-			speed = 0.1;
+			speed = 0.2;
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
 			state = down;
-			speed = 0.1;
+			speed = 0.2;
 		}
 	}
 	
@@ -94,7 +94,7 @@ void checkCollisionWithMap(float Dx, float Dy)	{
 					TileMap[i][j] = ' ';//убрали сердечко
 				}
 				if (TileMap[i][j] == 'c') {
-					playerScore += 1;//если взяли сердечко
+					playerScore++;//если взяли сердечко
 					TileMap[i][j] = ' ';//убрали сердечко
 				}
 			}
@@ -167,7 +167,7 @@ public:
 		sprite.setTextureRect(IntRect(0, 0, w, h));
 		direction = rand() % (3); //Направление движения врага задаём случайным образом
 		//через генератор случайных чисел
-		speed = 0.1;//даем скорость.этот объект всегда двигается
+		speed = 0.05;//даем скорость.этот объект всегда двигается
 		dx = speed;
 		}
 	}
@@ -259,12 +259,11 @@ public:
 		x = X;
 		y = Y;
 		direction = dir;
-		speed = 0.8;
+		speed = 0.6;
 		w = h = 16;
 		life = true;
 		//выше инициализация в конструкторе
 	}
-
 
 	void update(float time)
 	{
@@ -277,15 +276,12 @@ public:
 		}
 
 		if (life){
-			x += dx*time/2;//само движение пули по х
-			y += dy*time/2;//по у
-
-		if (x <= 0) x = 20;// задержка пули в левой стене, чтобы при проседании кадров она случайно не вылетела за предел карты и не было ошибки (сервер может тормозить!)
-		if (y <= 0) y = 20;
-
-		if (x >= 800) x = 780;// задержка пули в правой стене, чтобы при проседании кадров она случайно не вылетела за предел карты и не было ошибки (сервер может тормозить!)
-		if (y >= 640) y = 620;
-
+			x += dx*time;//само движение пули по х
+			y += dy*time;//по у
+			if (x <= 0) x = 20;// задержка пули в левой стене, чтобы при проседании кадров она случайно не вылетела за предел карты и не было ошибки (сервер может тормозить!)
+			if (y <= 0) y = 20;
+			if (x >= 800) x = 780;// задержка пули в правой стене, чтобы при проседании кадров она случайно не вылетела за предел карты и не было ошибки (сервер может тормозить!)
+			if (y >= 640) y = 620;
 
 			for (int i = y / 32; i < (y + h) / 32; i++)//проходимся по элементам карты
 				for (int j = x / 32; j < (x + w) / 32; j++)
@@ -399,9 +395,9 @@ bool isGameStart() {
 
 	Player p(heroImage, 100, 170, 96, 96, "Player");//объект класса игрока
 
-	std::list<Entity*>  entities;
 	//std::list<Entity*>  enemies; //список врагов
 	//std::list<Entity*>  Bullets; //список пуль
+	std::list<Entity*>  entities;	//сущности
 	std::list<Entity*>::iterator it; //итератор чтобы проходить по элементам списка
 	std::list<Entity*>::iterator it2;
 
@@ -435,10 +431,10 @@ while (window.isOpen())
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			//стреляем по нажатию клавиши "Space"
+			//стреляем по нажатию клавиши "P"
 			if (event.type == sf::Event::KeyPressed)
 			{
-				if (event.key.code == sf::Keyboard::Space)
+				if (event.key.code == sf::Keyboard::P)
 				{
 					entities.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state));
 					shoot.play();//играем звук пули
@@ -453,16 +449,16 @@ while (window.isOpen())
 		p.update(time); //оживляем объект “p” класса “Player” 
 
 		//оживляем врагов
-		for (it = entities.begin(); it != entities.end(); it++)
-		{
-			(*it)->update(time); //запускаем метод update()
-		}
+		//for (it = entities.begin(); it != entities.end(); it++)
+		//{
+	//		(*it)->update(time); //запускаем метод update()
+		//}
 
 		//оживляем пули
-		for (it = entities.begin(); it != entities.end(); it++)
-		{
-			(*it)->update(time); //запускаем метод update()
-		}
+		//for (it = entities.begin(); it != entities.end(); it++)
+		//{
+		//	(*it)->update(time); //запускаем метод update()
+		//}
 
 		//Проверяем список на наличие "мертвых" пуль и удаляем их
 		for (it = entities.begin(); it != entities.end();)//говорим что проходимся от начала до конца
@@ -494,27 +490,6 @@ while (window.isOpen())
 			else it++;//и идем курсором (итератором) к след объекту. так делаем со всеми объектами списка
 		}
 
-		if ((*it)->name == "EasyEnemy")
-			{
-				Entity *enemy = *it;
- 
-				for (std::list<Entity*>::iterator it2 = entities.begin(); it2 != entities.end(); it2++)
-				{
-					Entity *bullet = *it2;
-					if (bullet->name == "Bullet")
-						
-					if (bullet->life == true)
-					{
- 
-						if (bullet->getRect().intersects(enemy->getRect()))
-						{
-							bullet->life = false;
-							std::cout << bullet->life << std::endl;
-							enemy->life =false;
-						}
-					}
-				}
-		}
 		/*//взаимодействие
 		for (it = entities.begin(); it != entities.end(); it++)//проходимся по эл-там списка
 		{
@@ -552,14 +527,14 @@ for (int i = 0; i < HEIGHT_MAP; i++)
 	}
 
 		//объявили переменную здоровья и времени
-		std::ostringstream playerHealthString, gameTimeString;
+		std::ostringstream playerHealthString, gameTimeString, gameCrystal;
 
-		playerHealthString << p.health; gameTimeString << gameTime;//формируем строку
-		text.setString("Здоровье: " + playerHealthString.str() + "\nВремя игры: " + gameTimeString.str());//задаем строку тексту
+		playerHealthString << p.health; 
+		gameTimeString << gameTime;//формируем строку
+		gameCrystal << p.playerScore;
+		text.setString("Здоровье: " + playerHealthString.str() + "\nВремя игры: " + gameTimeString.str() + "\nКристаллы " + gameCrystal.str());//задаем строку тексту
 		text.setPosition(50, 50);//задаем позицию текста
 		window.draw(text);//рисуем этот текст
-
-		window.draw(p.sprite);//рисуем спрайт объекта “p” класса “Player”
 
 		//рисуем врагов
 		for (it = entities.begin(); it != entities.end(); it++)
@@ -572,9 +547,10 @@ for (int i = 0; i < HEIGHT_MAP; i++)
 		for (it = entities.begin(); it != entities.end(); it++)
 		{
 			if ((*it)->life) //если пули живы
-				window.draw((*it)->sprite); //рисуем объекты
+			window.draw((*it)->sprite); //рисуем объекты
 		}
 
+		window.draw(p.sprite);//рисуем спрайт объекта “p” класса “Player”
 		window.display();
 	}
 };
