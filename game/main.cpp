@@ -395,8 +395,6 @@ bool isGameStart() {
 
 	Player p(heroImage, 100, 170, 96, 96, "Player");//объект класса игрока
 
-	//std::list<Entity*>  enemies; //список врагов
-	//std::list<Entity*>  Bullets; //список пуль
 	std::list<Entity*>  entities;	//сущности
 	std::list<Entity*>::iterator it; //итератор чтобы проходить по элементам списка
 	std::list<Entity*>::iterator it2;
@@ -423,7 +421,7 @@ while (window.isOpen())
 	if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds();//игровое врем€ в 
 		//секундах идЄт вперед, пока жив игрок. ѕерезагружать как time его не надо. оно не обновл€ет логику игры
 		clock.restart();
-		time = time / 1100;
+		time = time / 1000;
 		createObjectForMapTimer += time;//наращиваем таймер
 		
 		sf::Event event;
@@ -447,18 +445,6 @@ while (window.isOpen())
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) { return false; }//если эскейп, то выходим из игры
 
 		p.update(time); //оживл€ем объект УpФ класса УPlayerФ 
-
-		//оживл€ем врагов
-		//for (it = entities.begin(); it != entities.end(); it++)
-		//{
-	//		(*it)->update(time); //запускаем метод update()
-		//}
-
-		//оживл€ем пули
-		//for (it = entities.begin(); it != entities.end(); it++)
-		//{
-		//	(*it)->update(time); //запускаем метод update()
-		//}
 
 		//ѕровер€ем список на наличие "мертвых" пуль и удал€ем их
 		for (it = entities.begin(); it != entities.end();)//говорим что проходимс€ от начала до конца
@@ -490,7 +476,7 @@ while (window.isOpen())
 			else it++;//и идем курсором (итератором) к след объекту. так делаем со всеми объектами списка
 		}
 
-		/*//взаимодействие
+		//взаимодействие
 		for (it = entities.begin(); it != entities.end(); it++)//проходимс€ по эл-там списка
 		{
 			if ((*it)->name == "EasyEnemy")
@@ -511,7 +497,7 @@ while (window.isOpen())
 				}
 			}
 		}
-		*/
+
 		window.clear();
 
 /////////////////////////////–исуем карту/////////////////////
