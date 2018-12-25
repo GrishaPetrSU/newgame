@@ -453,7 +453,6 @@ while (window.isOpen())
 		//{
 		//	(*it)->update(time); //запускаем метод update()
 		//}
-
 		//оживляем пули
 		//for (it = entities.begin(); it != entities.end(); it++)
 		//{
@@ -490,7 +489,7 @@ while (window.isOpen())
 			else it++;//и идем курсором (итератором) к след объекту. так делаем со всеми объектами списка
 		}
 
-		/*//взаимодействие
+		//взаимодействие
 		for (it = entities.begin(); it != entities.end(); it++)//проходимся по эл-там списка
 		{
 			if ((*it)->name == "EasyEnemy")
@@ -511,7 +510,7 @@ while (window.isOpen())
 				}
 			}
 		}
-		*/
+
 		window.clear();
 
 /////////////////////////////Рисуем карту/////////////////////
