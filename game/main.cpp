@@ -46,10 +46,11 @@ public:
 ////////////////////////////КЛАСС ИГРОКА////////////////////////
 class Player :public Entity {
 public:
-	int playerScore;//эта переменная может быть только у игрока
+	int playerScore, KillEn;//эта переменная может быть только у игрока
 
 	Player(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name){
 		playerScore = 0; 
+		KillEn = 0;
 		state = stay;
 		if (name == "Player"){ //Задаем спрайту один прямоугольник для //вывода одного игрока. IntRect – для приведения типов
 			sprite.setTextureRect(IntRect(0, 0, w, h));
@@ -91,7 +92,7 @@ void checkCollisionWithMap(float Dx, float Dy)	{
 				}
 
 				if (TileMap[i][j] == 'h') {
-					health += 20;//если взяли сердечко
+					health++;//если взяли сердечко
 					TileMap[i][j] = ' ';//убрали сердечко
 				}
 				if (TileMap[i][j] == 'c') {
@@ -168,7 +169,7 @@ public:
 		sprite.setTextureRect(IntRect(0, 0, w, h));
 		direction = rand() % (3); //Направление движения врага задаём случайным образом
 		//через генератор случайных чисел
-		speed = 0.05;//даем скорость.этот объект всегда двигается
+		speed = 0.25;//даем скорость.этот объект всегда двигается
 		dx = speed;
 		}
 	}
@@ -260,7 +261,7 @@ public:
 		x = X;
 		y = Y;
 		direction = dir;
-		speed = 0.6;
+		speed = 0.5;
 		w = h = 16;
 		life = true;
 		//выше инициализация в конструкторе
@@ -460,7 +461,7 @@ while (window.isOpen())
 		if ((p.getRect().intersects((*it)->getRect())) && ((*it)->name == "EasyEnemy"))
 				{
 					p.health = 0;
-					std::cout << "you are lose";
+					std::cout << " You are lose!";
 					p.life == false;
 					music.setVolume(0);
 					g_o.setVolume(80);
@@ -497,6 +498,7 @@ while (window.isOpen())
 								float yr = 150 + rand() % 350; // случайная координата врага на поле игры по оси “y” //создаем врагов и помещаем в список
 								entities.push_back(new Enemy(easyEnemyImage, xr, yr, 96, 96, "EasyEnemy"));
 								//enemiesCount += 1; //увеличили счётчик врагов
+								p.KillEn++;
 							}
 						}
 				}
@@ -518,12 +520,13 @@ for (int i = 0; i < HEIGHT_MAP; i++)
 	}
 
 		//объявили переменную здоровья и времени
-		std::ostringstream playerHealthString, gameTimeString, gameCrystal;
+		std::ostringstream playerHealthString, gameTimeString, gameCrystal, gameKillEn;
 
 		playerHealthString << p.health; 
 		gameTimeString << gameTime;//формируем строку
 		gameCrystal << p.playerScore;
-		text.setString("Здоровье: " + playerHealthString.str() + "\nВремя игры: " + gameTimeString.str() + "\nКристаллы " + gameCrystal.str());//задаем строку тексту
+		gameKillEn << p.KillEn;
+		text.setString("Сердец: " + playerHealthString.str() + "\nВремя игры: " + gameTimeString.str() + "\nКристаллы " + gameCrystal.str() + "\nУбито врагов " + gameKillEn.str());//задаем строку тексту
 		text.setPosition(50, 50);//задаем позицию текста
 		window.draw(text);//рисуем этот текст
 
