@@ -46,11 +46,12 @@ public:
 //////////////////////////// Ћј—— »√–ќ ј////////////////////////
 class Player :public Entity {
 public:
-	int playerScore, KillEn;//эта переменна€ может быть только у игрока
+	int takeHp, playerScore, KillEn;//эта переменна€ может быть только у игрока
 
 	Player(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name){
 		playerScore = 0; 
 		KillEn = 0;
+		takeHp = 0;
 		state = stay;
 		if (name == "Player"){ //«адаем спрайту один пр€моугольник дл€ //вывода одного игрока. IntRect Ц дл€ приведени€ типов
 			sprite.setTextureRect(IntRect(0, 0, w, h));
@@ -92,7 +93,7 @@ void checkCollisionWithMap(float Dx, float Dy)	{
 				}
 
 				if (TileMap[i][j] == 'h') {
-					health++;//если вз€ли сердечко
+					takeHp++;//если вз€ли сердечко
 					TileMap[i][j] = ' ';//убрали сердечко
 				}
 				if (TileMap[i][j] == 'c') {
@@ -497,7 +498,6 @@ while (window.isOpen())
 								float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ
 								float yr = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УyФ //создаем врагов и помещаем в список
 								entities.push_back(new Enemy(easyEnemyImage, xr, yr, 96, 96, "EasyEnemy"));
-								//enemiesCount += 1; //увеличили счЄтчик врагов
 								p.KillEn++;
 							}
 						}
@@ -520,13 +520,13 @@ for (int i = 0; i < HEIGHT_MAP; i++)
 	}
 
 		//объ€вили переменную здоровь€ и времени
-		std::ostringstream playerHealthString, gameTimeString, gameCrystal, gameKillEn;
+		std::ostringstream gameHp, gameTimeString, gameCrystal, gameKillEn;
 
-		playerHealthString << p.health; 
 		gameTimeString << gameTime;//формируем строку
 		gameCrystal << p.playerScore;
 		gameKillEn << p.KillEn;
-		text.setString("—ердец: " + playerHealthString.str() + "\n¬рем€ игры: " + gameTimeString.str() + "\n ристаллы " + gameCrystal.str() + "\n”бито врагов " + gameKillEn.str());//задаем строку тексту
+		gameHp << p.takeHp;
+		text.setString("\n¬рем€ игры: " + gameTimeString.str() + "\n—обрано сердец " + gameHp.str() + "\n ристаллы " + gameCrystal.str() + "\n”бито врагов " + gameKillEn.str());//задаем строку тексту
 		text.setPosition(50, 50);//задаем позицию текста
 		window.draw(text);//рисуем этот текст
 
