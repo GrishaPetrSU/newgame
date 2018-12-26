@@ -400,17 +400,17 @@ bool isGameStart() {
 	std::list<Entity*>::iterator it; //итератор чтобы проходить по элементам списка
 	std::list<Entity*>::iterator it2;
 
-	const int ENEMY_COUNT = 2;	//максимальное количество врагов в игре
+	const int ENEMY_COUNT = 1;	//максимальное количество врагов в игре
 	int enemiesCount = 0;	//текущее количество врагов в игре
 
 	//«аполн€ем список объектами врагами
 	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-	float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ
-	float yr = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УyФ
-	//создаем врагов и помещаем в список
-	entities.push_back(new Enemy(easyEnemyImage, xr, yr, 96, 96, "EasyEnemy"));
-	enemiesCount += 1; //увеличили счЄтчик врагов
+		float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ
+		float yr = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УyФ
+		//создаем врагов и помещаем в список
+		entities.push_back(new Enemy(easyEnemyImage, xr, yr, 96, 96, "EasyEnemy"));
+		enemiesCount += 1; //увеличили счЄтчик врагов
 	}
 
 	int createObjectForMapTimer = 0;//ѕеременна€ под врем€ дл€ генерировани€ камней
@@ -493,6 +493,10 @@ while (window.isOpen())
 							{
 								bullet->life = false;
 								enemy->life = false;
+								float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ
+								float yr = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УyФ //создаем врагов и помещаем в список
+								entities.push_back(new Enemy(easyEnemyImage, xr, yr, 96, 96, "EasyEnemy"));
+								//enemiesCount += 1; //увеличили счЄтчик врагов
 							}
 						}
 				}
