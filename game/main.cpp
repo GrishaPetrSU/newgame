@@ -46,10 +46,12 @@ public:
 ////////////////////////////КЛАСС ИГРОКА////////////////////////
 class Player :public Entity {
 public:
-	int playerScore;//эта переменная может быть только у игрока
+	int takeHp, playerScore, KillEn;//эта переменная может быть только у игрока
 
 	Player(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name){
 		playerScore = 0; 
+		KillEn = 0;
+		takeHp = 0;
 		state = stay;
 		if (name == "Player"){ //Задаем спрайту один прямоугольник для //вывода одного игрока. IntRect – для приведения типов
 			sprite.setTextureRect(IntRect(0, 0, w, h));
@@ -91,7 +93,7 @@ void checkCollisionWithMap(float Dx, float Dy)	{
 				}
 
 				if (TileMap[i][j] == 'h') {
-					health += 20;//если взяли сердечко
+					takeHp++;//если взяли сердечко
 					TileMap[i][j] = ' ';//убрали сердечко
 				}
 				if (TileMap[i][j] == 'c') {
@@ -168,7 +170,7 @@ public:
 		sprite.setTextureRect(IntRect(0, 0, w, h));
 		direction = rand() % (3); //Направление движения врага задаём случайным образом
 		//через генератор случайных чисел
-		speed = 0.05;//даем скорость.этот объект всегда двигается
+		speed = 0.25;//даем скорость.этот объект всегда двигается
 		dx = speed;
 		}
 	}
@@ -260,7 +262,7 @@ public:
 		x = X;
 		y = Y;
 		direction = dir;
-		speed = 0.6;
+		speed = 0.5;
 		w = h = 16;
 		life = true;
 		//выше инициализация в конструкторе
@@ -369,11 +371,6 @@ bool isGameStart() {
 	music.play();//воспроизводим музыку
 	music.setLoop(true);
 
-	//steps sounds
-	SoundBuffer stepsBuffer;//создаём буфер для звука
-	stepsBuffer.loadFromFile("audio/steps.ogg");//загружаем в него звук
-	Sound steps(stepsBuffer);//создаем звук и загружаем в него звук из буфера
-
 	Image map_image;//объект изображения для карты
 	map_image.loadFromFile("images/map.png");//загружаем файл для карты
 	Texture map;//текстура карты
@@ -400,17 +397,17 @@ bool isGameStart() {
 	std::list<Entity*>::iterator it; //итератор чтобы проходить по элементам списка
 	std::list<Entity*>::iterator it2;
 
-	const int ENEMY_COUNT = 2;	//максимальное количество врагов в игре
+	const int ENEMY_COUNT = 1;	//максимальное количество врагов в игре
 	int enemiesCount = 0;	//текущее количество врагов в игре
 
 	//Заполняем список объектами врагами
 	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-	float xr = 150 + rand() % 500; // случайная координата врага на поле игры по оси “x”
-	float yr = 150 + rand() % 350; // случайная координата врага на поле игры по оси “y”
-	//создаем врагов и помещаем в список
-	entities.push_back(new Enemy(easyEnemyImage, xr, yr, 96, 96, "EasyEnemy"));
-	enemiesCount += 1; //увеличили счётчик врагов
+		float xr = 150 + rand() % 500; // случайная координата врага на поле игры по оси “x”
+		float yr = 150 + rand() % 350; // случайная координата врага на поле игры по оси “y”
+		//создаем врагов и помещаем в список
+		entities.push_back(new Enemy(easyEnemyImage, xr, yr, 96, 96, "EasyEnemy"));
+		enemiesCount += 1; //увеличили счётчик врагов
 	}
 
 	int createObjectForMapTimer = 0;//Переменная под время для генерирования камней
@@ -460,7 +457,7 @@ while (window.isOpen())
 		if ((p.getRect().intersects((*it)->getRect())) && ((*it)->name == "EasyEnemy"))
 				{
 					p.health = 0;
-					std::cout << "you are lose";
+					std::cout << " You are lose!";
 					p.life == false;
 					music.setVolume(0);
 					g_o.setVolume(80);
@@ -493,6 +490,10 @@ while (window.isOpen())
 							{
 								bullet->life = false;
 								enemy->life = false;
+								float xr = 150 + rand() % 500; // случайная координата врага на поле игры по оси “x”
+								float yr = 150 + rand() % 350; // случайная координата врага на поле игры по оси “y” //создаем врагов и помещаем в список
+								entities.push_back(new Enemy(easyEnemyImage, xr, yr, 96, 96, "EasyEnemy"));
+								p.KillEn++;
 							}
 						}
 				}
@@ -514,12 +515,13 @@ for (int i = 0; i < HEIGHT_MAP; i++)
 	}
 
 		//объявили переменную здоровья и времени
-		std::ostringstream playerHealthString, gameTimeString, gameCrystal;
+		std::ostringstream gameHp, gameTimeString, gameCrystal, gameKillEn;
 
-		playerHealthString << p.health; 
 		gameTimeString << gameTime;//формируем строку
 		gameCrystal << p.playerScore;
-		text.setString("Здоровье: " + playerHealthString.str() + "\nВремя игры: " + gameTimeString.str() + "\nКристаллы " + gameCrystal.str());//задаем строку тексту
+		gameKillEn << p.KillEn;
+		gameHp << p.takeHp;
+		text.setString("\nВремя игры: " + gameTimeString.str() + "\nСобрано сердец " + gameHp.str() + "\nКристаллы " + gameCrystal.str() + "\nУбито врагов " + gameKillEn.str());//задаем строку тексту
 		text.setPosition(50, 50);//задаем позицию текста
 		window.draw(text);//рисуем этот текст
 
