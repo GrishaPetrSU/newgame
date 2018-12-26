@@ -371,11 +371,6 @@ bool isGameStart() {
 	music.play();//воспроизводим музыку
 	music.setLoop(true);
 
-	//steps sounds
-	SoundBuffer stepsBuffer;//создаём буфер для звука
-	stepsBuffer.loadFromFile("audio/steps.ogg");//загружаем в него звук
-	Sound steps(stepsBuffer);//создаем звук и загружаем в него звук из буфера
-
 	Image map_image;//объект изображения для карты
 	map_image.loadFromFile("images/map.png");//загружаем файл для карты
 	Texture map;//текстура карты
