@@ -170,7 +170,7 @@ public:
 		sprite.setTextureRect(IntRect(0, 0, w, h));
 		direction = rand() % (3); //Направление движения врага задаём случайным образом
 		//через генератор случайных чисел
-		speed = 0.25;//даем скорость.этот объект всегда двигается
+		speed = 0.15;//даем скорость.этот объект всегда двигается
 		dx = speed;
 		}
 	}
@@ -447,7 +447,8 @@ while (window.isOpen())
 		//Проверяем список на наличие "мертвых" пуль и удаляем их
 		for (it = entities.begin(); it != entities.end();)//говорим что проходимся от начала до конца
 		{// если этот объект мертв, то удаляем его
-		if ((*it)-> life == false)	{ it = entities.erase(it); } 
+			Entity *b = *it;
+			if ((*it)-> life == false)	{ it = entities.erase(it);  delete b;} 
 			else  it++;//и идем курсором (итератором) к след объекту.		
 		}
 
