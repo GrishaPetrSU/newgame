@@ -320,11 +320,11 @@ void menu(RenderWindow & window) {
 		menu2.setColor(Color::White);
 		menu3.setColor(Color::White);
 		menuNum = 0;
-		window.clear(Color(129, 181, 221));
+		window.clear(Color(0, 0, 0));
  
-		if (IntRect(100, 30, 300, 50).contains(Mouse::getPosition(window))) { menu1.setColor(Color::Blue); menuNum = 1; }
-		if (IntRect(100, 90, 300, 50).contains(Mouse::getPosition(window))) { menu2.setColor(Color::Blue); menuNum = 2; }
-		if (IntRect(100, 150, 300, 50).contains(Mouse::getPosition(window))) { menu3.setColor(Color::Blue); menuNum = 3; }
+		if (IntRect(10, 30, 300, 50).contains(Mouse::getPosition(window))) { menu1.setColor(Color::Red); menuNum = 1; }
+		if (IntRect(10, 90, 300, 50).contains(Mouse::getPosition(window))) { menu2.setColor(Color::Yellow); menuNum = 2; }
+		if (IntRect(10, 150, 300, 50).contains(Mouse::getPosition(window))) { menu3.setColor(Color::Green); menuNum = 3; }
  
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
